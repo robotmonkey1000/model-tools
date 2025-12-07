@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "model-tools",
+	"version": "${version}",
+	"name": "Model Tools",
+	"description": "A tool to preview and apply custom models from resource packs.",
+	"authors": [
+		"robotmonkey1000"
+	],
+	"contact": {
+		"homepage": "https://robotmonkey.studio",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/model-tools/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"studio.robotmonkey.model_tools.ModelTools"
+		],
+		"client": [
+			"studio.robotmonkey.model_tools.ModelToolsClient"
+		]
+	},
+	"mixins": [
+		"model-tools.mixins.json",
+		{
+			"config": "model-tools.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.18.1",
+		"minecraft": "~1.21.10",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

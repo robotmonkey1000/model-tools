@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "studio.robotmonkey.model_tools.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ItemEntityAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
