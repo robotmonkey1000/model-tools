@@ -4,7 +4,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.StateSwitchingButton;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -12,11 +13,11 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import studio.robotmonkey.model_tools.ModelToolsClient;
 
-public class ToggleItemWidget extends StateSwitchingButton {
+public class ToggleItemWidget extends ImageButton {
 
     private final Minecraft minecraft;
     private final int offsetX = 2;
@@ -30,35 +31,36 @@ public class ToggleItemWidget extends StateSwitchingButton {
     private ToggleGroup group;
 
     public ToggleItemWidget(Minecraft minecraft, int x, int y, int width, int height, Component tooltip, ItemStack itemStack, boolean hasDecorations, boolean showTooltip, OnPress onPress) {
-        super(x, y, width, height, true);
+        super(x, y, width, height, new WidgetSprites(Identifier.withDefaultNamespace("widget/button"), Identifier.withDefaultNamespace("widget/button_disabled"), Identifier.withDefaultNamespace("widget/button_highlighted")), onPress);
         this.minecraft = minecraft;
 //        this.offsetX = i;
 //        this.offsetY = j;
         this.itemStack = itemStack;
+        this.setTooltip(Tooltip.create(tooltip));
         this.decorations = hasDecorations;
         this.tooltip = showTooltip;
         setTooltip(Tooltip.create(tooltip));
 
         this.onPress = onPress;
 
-        WidgetSprites sprites = new WidgetSprites(ResourceLocation.withDefaultNamespace("widget/button"), ResourceLocation.withDefaultNamespace("widget/button_disabled"), ResourceLocation.withDefaultNamespace("widget/button_highlighted"));
-        initTextureValues(sprites);
+//        WidgetSprites sprites = new WidgetSprites(Identifier.withDefaultNamespace("widget/button"), Identifier.withDefaultNamespace("widget/button_disabled"), Identifier.withDefaultNamespace("widget/button_highlighted"));
+//        initTextureValues(sprites);
     }
 
-    public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
-        super.renderWidget(guiGraphics, i, j, f);
+    public void renderContents(GuiGraphics guiGraphics, int i, int j, float f) {
+        super.renderContents(guiGraphics, i, j, f);
         guiGraphics.renderItem(this.itemStack, this.getX() + this.offsetX, this.getY() + this.offsetY, 0);
-        if (this.decorations) {
-            guiGraphics.renderItemDecorations(this.minecraft.font, this.itemStack, this.getX() + this.offsetX, this.getY() + this.offsetY, (String)null);
-        }
-
-        if (this.isFocused()) {
-            guiGraphics.submitOutline(this.getX(), this.getY(), this.getWidth(), this.getHeight(), -1);
-        }
-
-        if (this.tooltip && this.isHoveredOrFocused()) {
-            this.renderTooltip(guiGraphics, i, j);
-        }
+//        if (this.decorations) {
+//            guiGraphics.renderItemDecorations(this.minecraft.font, this.itemStack, this.getX() + this.offsetX, this.getY() + this.offsetY, (String)null);
+//        }
+//
+//        if (this.isFocused()) {
+//            guiGraphics.submitOutline(this.getX(), this.getY(), this.getWidth(), this.getHeight(), -1);
+//        }
+//
+//        if (this.tooltip && this.isHoveredOrFocused()) {
+//            this.renderTooltip(guiGraphics, i, j);
+//        }
 
     }
 
@@ -75,7 +77,7 @@ public class ToggleItemWidget extends StateSwitchingButton {
     }
 
     public void onPress(InputWithModifiers inputWithModifiers) {
-        if(!this.isStateTriggered()) return;
+        if(!this.isActive()) return;
         if(group != null)
         {
             group.WidgetPressed(this);
@@ -88,8 +90,8 @@ public class ToggleItemWidget extends StateSwitchingButton {
         this.onPress(mouseButtonEvent);
     }
 
-    @Environment(EnvType.CLIENT)
-    public interface OnPress {
-        void onPress(ToggleItemWidget button);
-    }
+//    @Environment(EnvType.CLIENT)
+//    public interface OnPress extends Button.OnPress {
+//        void onPress(ToggleItemWidget button);
+//    }
 }

@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.lwjgl.glfw.GLFW;
@@ -33,7 +33,7 @@ public class ModelToolsClient implements ClientModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static KeyMapping keyBinding;
-	private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath(MOD_ID, "model_tools_category"));
+	private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(MOD_ID, "model_tools_category"));
 
 	public static HashMap<String, ArrayList<String>> LoadedModels = new HashMap<>();
 
@@ -47,14 +47,14 @@ public class ModelToolsClient implements ClientModInitializer {
 				public void onResourceManagerReload(ResourceManager resourceManager) {
 					LoadedModels.clear();
 
-					for(ResourceLocation id : resourceManager.listResources("equipment", path -> path.toString().endsWith(".json")).keySet()) {
+					for(Identifier id : resourceManager.listResources("equipment", path -> path.toString().endsWith(".json")).keySet()) {
 						ArrayList<String> models = LoadedModels.getOrDefault(id.getNamespace(), new ArrayList<>());
 						models.add(id.getPath());
 						LoadedModels.put(id.getNamespace(), models);
 
 					}
 
-					for(ResourceLocation id : resourceManager.listResources("items", path -> path.toString().endsWith(".json")).keySet()) {
+					for(Identifier id : resourceManager.listResources("items", path -> path.toString().endsWith(".json")).keySet()) {
 						ArrayList<String> models = LoadedModels.getOrDefault(id.getNamespace(), new ArrayList<>());
 						models.add(id.getPath());
 						LoadedModels.put(id.getNamespace(), models);
@@ -64,8 +64,8 @@ public class ModelToolsClient implements ClientModInitializer {
 				}
 
 				@Override
-				public ResourceLocation getFabricId() {
-					return ResourceLocation.fromNamespaceAndPath(MOD_ID, "reloader");
+				public Identifier getFabricId() {
+					return Identifier.fromNamespaceAndPath(MOD_ID, "reloader");
 				}
 			}
 		);

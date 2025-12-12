@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.entity.state.ItemEntityRenderState;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -109,7 +109,7 @@ public class ModelViewer extends Screen {
             {
                 String model = modelSelections.get(selected).getSelected().model_path.replaceFirst("items/", "");
                 model = model.replaceFirst(".json", "");
-                itemStack.set(DataComponents.ITEM_MODEL, ResourceLocation.fromNamespaceAndPath(selected, model));
+                itemStack.set(DataComponents.ITEM_MODEL, Identifier.fromNamespaceAndPath(selected, model));
             }
         }
 
@@ -124,7 +124,7 @@ public class ModelViewer extends Screen {
         EntityRenderState entityRenderState = entityRenderer.createRenderState(entity, 0.5f);
         ((ItemEntityRenderState)entityRenderState).bobOffset = 0;
         entityRenderState.lightCoords = 15728880;
-        entityRenderState.hitboxesRenderState = null;
+//        entityRenderState.hitboxesRenderState = null;
         entityRenderState.shadowPieces.clear();
         entityRenderState.outlineColor = 0;
         entityRenderState.ageInTicks = rotation;
@@ -219,8 +219,8 @@ public class ModelViewer extends Screen {
                 model = model.replaceFirst("equipment/", "");
 
                 model = model.replaceFirst(".json", "");
-                itemStack.set(DataComponents.ITEM_MODEL, ResourceLocation.fromNamespaceAndPath(selected, model));
-                ResourceKey<EquipmentAsset> assetResourceKey = ResourceKey.create(EquipmentAssets.ROOT_ID, ResourceLocation.fromNamespaceAndPath(selected, model));
+                itemStack.set(DataComponents.ITEM_MODEL, Identifier.fromNamespaceAndPath(selected, model));
+                ResourceKey<EquipmentAsset> assetResourceKey = ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(selected, model));
                 if(!itemStack.isStackable())
                     itemStack.set(DataComponents.EQUIPPABLE, Equippable.builder(slot).setAsset(assetResourceKey).build());
             }
@@ -232,7 +232,7 @@ public class ModelViewer extends Screen {
         EntityRenderer<? super LivingEntity, ?> entityRenderer = entityRenderDispatcher.getRenderer(livingEntity);
         EntityRenderState entityRenderState = entityRenderer.createRenderState(livingEntity, 1.0F);
         entityRenderState.lightCoords = 15728880;
-        entityRenderState.hitboxesRenderState = null;
+//        entityRenderState.hitboxesRenderState = null;
         entityRenderState.shadowPieces.clear();
         entityRenderState.outlineColor = 0;
         guiGraphics.submitEntityRenderState(entityRenderState, f, vector3f, quaternionf, quaternionf2, i, j, k, l);
@@ -302,7 +302,7 @@ public class ModelViewer extends Screen {
     {
         if(!ModelToolsClient.hasServerConnection) return;
 
-        ResourceLocation modelLoc = ResourceLocation.fromNamespaceAndPath("","");
+        Identifier modelLoc = Identifier.fromNamespaceAndPath("","");
         if(modelSelections.get(selected) == null || modelSelections.get(selected).getSelected() == null)
         {
             //TODO add a "select a model below" message?
@@ -315,7 +315,7 @@ public class ModelViewer extends Screen {
 
             model = model.replaceFirst(".json", "");
 
-            modelLoc = ResourceLocation.fromNamespaceAndPath(selected, model);
+            modelLoc = Identifier.fromNamespaceAndPath(selected, model);
 
         }
 
@@ -347,11 +347,11 @@ public class ModelViewer extends Screen {
 
     public void refreshState() {
 
-        setModelButton.setStateTriggered(ModelToolsClient.hasServerConnection);
-        setEquipmentButton.setStateTriggered(ModelToolsClient.hasServerConnection);
+        setModelButton.active = (ModelToolsClient.hasServerConnection);
+        setEquipmentButton.active = (ModelToolsClient.hasServerConnection);
 
         if(ModelToolsClient.hasServerConnection) {
-            setEquipmentButton.setStateTriggered(displayType != RenderDisplay.ITEM);
+            setEquipmentButton.active = (displayType != RenderDisplay.ITEM);
         }
     }
 

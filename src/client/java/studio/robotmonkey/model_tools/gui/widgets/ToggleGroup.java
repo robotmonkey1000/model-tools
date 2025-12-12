@@ -16,12 +16,12 @@ public class ToggleGroup {
     }
 
     public void WidgetPressed(ToggleItemWidget widget){
-        widget.setStateTriggered(false);
+        widget.active = false;
         for(ToggleItemWidget toggle:widgets)
         {
             if(toggle != widget)
             {
-                toggle.setStateTriggered(true);
+                toggle.active = true;
             }
         }
     }
